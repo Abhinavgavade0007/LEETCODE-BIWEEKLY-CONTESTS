@@ -1,0 +1,35 @@
+Q1. Minimum Moves to Equal Array Elements III
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        int maxi=*max_element(nums.begin(),nums.end());
+        int ans=0;
+        for(int it:nums) {
+            ans+=maxi-it;
+        }
+        return ans;
+    }
+};
+
+Q2. Count Subarrays With Majority Element I
+class Solution {
+public:
+    int countMajoritySubarrays(vector<int>& nums, int target) {
+        int n=nums.size();
+        int majjcnt=n/2;
+        int result=0;
+        for(int i=0;i<n;i++) {
+            int majcnt=0;
+            for(int j=i;j<n;j++) {
+                // if(nums[j] == target) majcnt++;
+                if(nums[j] == target) majcnt++;
+                int len=j-i+1;
+                if(majcnt > len/2) result++;
+                // if(majcnt >= majjcnt) cnt++;
+            }
+            majjcnt+=majcnt;
+        }
+        return result;
+    }
+};
+# 3,4 Need to upsolve
