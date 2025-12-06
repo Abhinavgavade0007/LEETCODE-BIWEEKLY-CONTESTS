@@ -1,0 +1,111 @@
+#**3765. Complete Prime Number**
+class Solution {
+public:
+    bool check(int num) {
+        if(num <= 1) return false;
+        if(num <= 3) return true;
+        if(num%2 == 0|| num%3==0) return false;
+        for(long long i=5;i*i <=num;i+=6) {
+            if(num%i == 0 || num%(i+2)==0) return false;
+        }
+        return true;
+    }
+    bool completePrime(int num) {
+        string temp=to_string(num);
+        string it="";
+        long long logg=1;
+        int ans=0;
+        for(int i=0;i<temp.size();i++) {
+            ans=ans*10+(temp[i]-'0');
+            if(!check(ans)) return false;
+        }
+        ans=0;
+        for(int i=temp.size()-1;i>=0;i--) {
+            ans+=(temp[i]-'0')*logg;
+            logg*=10;
+            if(!check(ans)) return false;
+        }
+        return true;
+    }
+};
+
+# **3766. Minimum Operations to Make Binary Palindrome**
+class Solution {
+public:
+    bool check(int num) {
+        if(num == 0) return true;
+        string temp=bitset<32>(num).to_string();
+        temp.erase(0,temp.find_first_not_of('0'));
+        if(temp.empty()) temp="0";
+        int n=temp.size();
+        if(n == 1) return true;
+        int i=0,j=n-1;
+        while(i < j) {
+            if(temp[i] == temp[j]) {
+                i++;
+                j--;
+                continue;
+            } else return false;
+        }
+        return true;
+    }
+    void calculate(vector<int>&precompute,vector<int>nums) {
+        for(int i=0;i<=5000;i++) {
+            if(check(i)) precompute[i]=1;
+            else precompute[i]=0;
+        }
+    }
+    
+    vector<int> minOperations(vector<int>& nums) {
+        int n=nums.size();
+        vector<int>ans(n,0);
+        vector<int>precompute(5001);
+        calculate(precompute,nums);
+        for(int i=0;i<n;i++) {
+            int x=nums[i];
+            if(precompute[x]) {
+                ans[i]=0;
+                continue;
+            }
+            int l=x,r=x;
+            while(l>=0 && !precompute[l]) l--;
+            while(r<=5000 && !precompute[r]) r++;
+
+            int ans1=(l >= 0 ? x-l : INT_MAX);
+            int ans2=(r <= 5000 ? r-x : INT_MAX);
+
+            ans[i]=min(ans1,ans2);
+        }
+        return ans;
+    }
+};
+
+# **3767. Maximize Points After Choosing K Tasks**
+
+class Solution {
+public:
+    long long maxPoints(vector<int>& technique1, vector<int>& technique2, int k) {
+        int n=technique1.size();
+        vector<pair<int,int>>temp(n);
+        long long finalans=0;
+        for(int i=0;i<n;i++) {
+            temp[i]={technique1[i]-technique2[i],i};
+        }
+        sort(temp.rbegin(),temp.rend());
+        for(int j=0;j<k;j++) {
+            auto it=temp[j];
+            int index=it.second;
+            finalans+=technique1[index];
+        }
+        for(int b=k;b<n;b++) {
+            if(b < k) {
+                continue;
+            }
+            int index=temp[b].second;
+            finalans +=  max(technique1[index],technique2[index]);
+        }
+        return finalans;
+    }
+};
+
+NEED TO UPSOLVE THE 4th ONE
